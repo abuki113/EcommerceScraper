@@ -66,9 +66,8 @@ class EcommerceSpiderSpider(scrapy.Spider):
         content = response
 
         prod_item = EcommerceScraperItem()
-        prod_item["name"] = content.css("div.b-advert-title-inner.qa-advert-title.b-advert-title-inner--h1::text").get()
-        prod_item["description"] = [ for cxs in content.css("div.b-advert-attributes__tag::text").getall()]
-
+        prod_item["name"] = content.css("div.b-advert-title-inner.qa-advert-title.b-advert-title-inner--h1::text").get().replace("\n", "").strip()
+        prod_item["description"] = ', '.join(desc.strip() for desc in content.css("div.b-advert-attributes__tag::text").getall()).replace("\n", "").strip()
         yield prod_item
 
     async def errback(self, failure):
