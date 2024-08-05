@@ -41,27 +41,23 @@ class EcommerceSpiderSpider(scrapy.Spider):
                 url=product_url,
                 callback=self.parse_product_data,
             )
-        # next_page = response.css('a.pagination__next::attr(href)').get()
-        # if next_page:
-        #     next_page_url = "https://jiji.com.et" + next_page
-        #     yield response.follow(
-        #         url=next_page_url,
-        #         callback=self.parse,
-        #         meta={
-        #             'playwright': True,
-        #             'playwright_include_page': True,
-        #             'playwright_page_methods': [
-        #                 PageMethod("wait_for_timeout", 10),
-        #             ],
-        #             'errback': self.errback,
-        #         }
-        #     )
+        next_page = response.css('a.pagination__next::attr(href)').get()
+        if next_page:
+            next_page_url = "https://jiji.com.et" + next_page
+            yield response.follow(
+                url=next_page_url,
+                callback=self.parse,
+                meta={
+                    'playwright': True,
+                    'playwright_include_page': True,
+                    'playwright_page_methods': [
+                        PageMethod("wait_for_timeout", 10),
+                    ],
+                    'errback': self.errback,
+                }
+            )
 
-    async def parse_product_data(self, response):
-        # page = response.meta["playwright_page"]
-        # # await asyncio.sleep(10)
-        # html_str = await page.content()
-        # await page.close()
+    def parse_product_data(self, response):
 
         content = response
 
