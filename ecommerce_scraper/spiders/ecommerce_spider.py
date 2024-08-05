@@ -2,7 +2,7 @@ import scrapy
 from scrapy.selector import Selector
 from scrapy_playwright.page import PageMethod
 from ..items import EcommerceScraperItem
-import asyncio
+
 
 class EcommerceSpiderSpider(scrapy.Spider):
     name = "ecommerce_spider"
@@ -18,9 +18,7 @@ class EcommerceSpiderSpider(scrapy.Spider):
                 meta={
                     'playwright': True,
                     'playwright_include_page': True,
-                    'playwright_page_methods': [
-                        PageMethod("wait_for_timeout", 10),
-                    ],
+                    'playwright_page_methods': [PageMethod("wait_for_timeout", 10)],
                     'errback': self.errback,
                     
                 },
@@ -28,7 +26,6 @@ class EcommerceSpiderSpider(scrapy.Spider):
 
     async def parse(self, response):
         page = response.meta["playwright_page"]
-        # await asyncio.sleep(10)
         html_str = await page.content()
         await page.close()
 
@@ -50,20 +47,18 @@ class EcommerceSpiderSpider(scrapy.Spider):
                 meta={
                     'playwright': True,
                     'playwright_include_page': True,
-                    'playwright_page_methods': [
-                        PageMethod("wait_for_timeout", 10),
-                    ],
+                    'playwright_page_methods': [PageMethod("wait_for_timeout", 10)],
                     'errback': self.errback,
                 }
             )
 
     def parse_product_data(self, response):
-
         content = response
 
         prod_item = EcommerceScraperItem()
         prod_item["name"] = content.css("div.b-advert-title-inner.qa-advert-title.b-advert-title-inner--h1::text").get().replace("\n", "").strip()
         prod_item["description"] = ', '.join(desc.strip() for desc in content.css("div.b-advert-attributes__tag::text").getall()).replace("\n", "").strip()
+        prod_item["image_urls"] = content.css("img.b-slider-image.qa-carousel-slide::attr('src')").getall()  
         yield prod_item
 
     async def errback(self, failure):

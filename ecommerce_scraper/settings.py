@@ -76,10 +76,12 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    "ecommerce_scraper.pipelines.EcommerceScraperPipeline": 300,
-#}
-
+ITEM_PIPELINES = {
+#   "ecommerce_scraper.pipelines.EcommerceScraperPipeline": 300,
+   "ecommerce_scraper.pipelines.customImagePipeline": 100,
+}
+IMAGES_STORE = "./data/images"
+DOWNLOAD_TIMEOUT = 160
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 # AUTOTHROTTLE_ENABLED = True
