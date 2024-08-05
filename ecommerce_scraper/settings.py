@@ -77,8 +77,9 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-#   "ecommerce_scraper.pipelines.EcommerceScraperPipeline": 300,
-   "ecommerce_scraper.pipelines.customImagePipeline": 100,
+    "ecommerce_scraper.pipelines.SaveToMySQLPipeline": 600,
+    "ecommerce_scraper.pipelines.SaveToPostgresPipeline": 600,
+    "ecommerce_scraper.pipelines.customImagePipeline": 100,
 }
 IMAGES_STORE = "./data/images"
 DOWNLOAD_TIMEOUT = 160
